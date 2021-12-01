@@ -1,31 +1,26 @@
+ipeline {
+    agent any
 
-pipeline {
-
-     parameters {
+    parameters {
         string(name: 'environment', defaultValue: 'default', description: 'Workspace/environment file to use for deployment')
         string(name: 'version', defaultValue: '', description: 'Version variable to pass to Terraform')
         booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
-
     }
-
-
-     environment {
+    
+    environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
     }
 
-   agent  any
-
     stages {
-        stage('checkout') {
+         stage('checkout') {
             steps {
                  script{                       
                             git "https://github.com/Bohdan-Kobliuk/test.git"
                     }
                 }
             }
-
-        stages {
+         
         stage('Plan') {
             steps {
                 script {
@@ -66,6 +61,4 @@ pipeline {
             archiveArtifacts artifacts: 'tfplan.txt'
         }
     }
-    }
-
-  }
+}
