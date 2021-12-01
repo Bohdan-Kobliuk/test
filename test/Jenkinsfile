@@ -23,10 +23,10 @@ pipeline {
         stage('Plan') {
             steps {
                 
-                bat 'terraform init -input=false'
-                bat 'terraform workspace select ${environment}'
-                bat "terraform plan -input=false -out tfplan -var 'version=${params.version}' --var-file=environments/${params.environment}.tfvars"
-                bat 'terraform show -no-color tfplan > tfplan.txt'
+                bash 'terraform init -input=false'
+                bash 'terraform workspace select ${environment}'
+                bash "terraform plan -input=false -out tfplan -var 'version=${params.version}' --var-file=environments/${params.environment}.tfvars"
+                bash 'terraform show -no-color tfplan > tfplan.txt'
             }
         }
 
@@ -48,7 +48,7 @@ pipeline {
 
         stage('Apply') {
             steps {
-                bat "terraform apply -input=false tfplan"
+                bash "terraform apply -input=false tfplan"
             }
         }
     }
