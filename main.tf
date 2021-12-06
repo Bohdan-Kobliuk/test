@@ -3,14 +3,21 @@ resource "aws_instance" "web1" {
   instance_type = "t2.micro"
 
 }
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "2.77.0"
+resource "aws_security_group" "allow_http" {
+  name        = "allow_http"
 
-  name                 = "task"
-  cidr                 = "10.0.0.0/16"
-  azs                  = ["us-east-1a","us-east-1b"]
-  public_subnets       = ["10.0.4.0/24"]
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-}
+  ingress {
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
